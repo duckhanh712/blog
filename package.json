@@ -1,0 +1,55 @@
+{
+  "name": "blog",
+  "version": "1.0.0",
+  "description": "tech personal blog",
+  "main": "app.js",
+  "scripts": {
+    "dcc:up": "docker-compose -f deployment/docker-compose.yml up -d && yarn dev",
+    "dev": "nodemon index.js",
+    "start": "",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/duckhanh712/blog.git"
+  },
+  "author": "duckhanh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/duckhanh712/blog/issues"
+  },
+  "homepage": "https://github.com/duckhanh712/blog#readme",
+  "dependencies": {
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "date-fns": "^2.28.0",
+    "dotenv": "^16.0.3",
+    "express": "^4.17.3",
+    "express-promise-router": "^4.1.1",
+    "fs": "^0.0.1-security",
+    "got": "^11.8.2",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.21",
+    "module-alias": "^2.2.2",
+    "mongoose": "^6.9.0",
+    "morgan": "^1.10.0",
+    "nnn-router": "^1.1.5",
+    "statuses": "^2.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15",
+    "prettier": "^2.6.1"
+  },
+  "_moduleAliases": {
+    "@root": "./",
+    "@routes": "./routes/",
+    "@middleware": "./middleware/",
+    "@helpers": "./helpers/",
+    "@endpoints": "./endpoints/",
+    "@constants": "./constants/"
+  },
+  "engines": {
+    "node": "14"
+  },
+  "type": "module"
+}
