@@ -1,3 +1,4 @@
-export default async (req, res) => {
-    return res.send("Everything's ok")
-  }
+export default async (_req, res) => {
+
+  return res.send('Crawling...')
+}

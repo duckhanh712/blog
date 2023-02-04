@@ -6,24 +6,21 @@ import statuses from 'statuses'
 import cookie from 'cookie-parser'
 import morgan from 'morgan'
 import mongoose from 'mongoose'
-import dotenv from 'dotenv'
+import rateLimit from 'express-rate-limit'
 
-dotenv.config()
-// dbb
+// db
 const mongoSettings = {
   autoIndex: true,
   useNewUrlParser: true,
   useUnifiedTopology: true
 }
 
-mongoose.set("strictQuery", false);
+mongoose.set('strictQuery', false)
 mongoose.connect(process.env.MONGODB_URI, mongoSettings)
 mongoose.Promise = global.Promise
 mongoose.connection.once('open', () => {
   console.log('Connected to mongoDB!')
 })
-
-
 
 express.response.sendStatus = function (statusCode) {
   const body = { message: statuses(statusCode) || String(statusCode) }
@@ -34,15 +31,23 @@ express.response.sendStatus = function (statusCode) {
 
 const app = express()
 
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false // Disable the `X-RateLimit-*` headers
+})
+
 app.use(
   cors({
     origin: true,
-    credentials: true,
+    credentials: true
   }),
   express.urlencoded({ extended: true, limit: '50mb' }),
   express.json({ limit: '10mb' }),
   express.text(),
-  cookie()
+  cookie(),
+  limiter
 )
 
 app.use(
@@ -54,22 +59,9 @@ app.use(
 )
 
 
-app.use('/users', async (req, res) => {
-  const users = await Users.save({
-    name: 'aaaaaa',
-    email: "aaa223@gmail.com"
-  })
-console.log(users);
-    return res.send(users)
-})
-
-app.use(
-  nnnRouter({ routeDir: 'routes', baseRouter: promiseRouter() }),
-  (error, req, res, next) => {
-    console.error(error)
-    return res.sendStatus(500)
-  }
-)
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'))
+}
 
 const port = process.env.PORT || 6666
 app.listen(port, () => {
