@@ -2,25 +2,39 @@ import camelcaseKeys from 'camelcase-keys'
 import PostModel from '../../models/posts.js'
 
 export default async (req, res) => {
-  const { page = 1, limit = 20 } = req.query
+  const page = +req.query.page || 1
+  const limit = +req.query.limit || 20
+
+  let filters = {}
 
   if (page <= 0 || limit < 1) return res.sendStatus(400)
+  const offset = page > 1 ? (page - 1) * limit : 0
 
-  const offset = page > 1 ? (+page - 1) * +limit : 0
+  const { posts, meta } = await getPosts({
+    offset,
+    limit,
+    filters
+  })
 
-  const posts = await filterPosts({ skip: offset, limit, filters: {} })
-
-  return res.send(camelcaseKeys(posts, { deep: true }))
+  return res.send({ data: posts, meta: { ...meta, page } })
 }
 
-function filterPosts({ skip, limit, filters }) {
+async function getPosts({ offset, limit, filters }) {
   const populateOpt = {
     path: 'user',
     select: '-_id name username avatar reputation posts_count followers_count'
   }
-  return PostModel.find(filters, '-__v -created_at -updated_at')
+  const total = await PostModel.count(filters)
+  const posts = await PostModel.find(filters, '-__v -created_at -updated_at')
     .populate(populateOpt)
-    .skip(skip)
+    .skip(offset)
     .limit(limit)
     .lean()
+
+  const meta = {
+    total,
+    perPage: limit
+  }
+
+  return { meta, posts: camelcaseKeys(posts, { deep: true }) }
 }
