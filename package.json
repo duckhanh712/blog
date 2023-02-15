@@ -27,6 +27,7 @@
     "camelcase-keys": "^8.0.2",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
+    "cron": "^2.2.0",
     "date-fns": "^2.28.0",
     "express": "^4.17.3",
     "express-promise-router": "^4.1.1",
