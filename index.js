@@ -4,7 +4,6 @@ import nnnRouter from 'nnn-router'
 import cors from 'cors'
 import statuses from 'statuses'
 import cookie from 'cookie-parser'
-import morgan from 'morgan'
 import mongoose from 'mongoose'
 import rateLimit from 'express-rate-limit'
 
@@ -58,10 +57,8 @@ app.use(
   }
 )
 
-
-if (process.env.NODE_ENV === 'development') {
-  app.use(morgan('dev'))
-}
+import cron from './tasks/viblo/cron.js'
+cron()
 
 const port = process.env.PORT || 6666
 app.listen(port, () => {

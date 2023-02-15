@@ -16,7 +16,7 @@ export default async (req, res) => {
     filters
   })
 
-  return res.send({ data: posts, meta: { ...meta, page } })
+  return res.send({ data: posts, pagination: { ...meta, page } })
 }
 
 async function getPosts({ offset, limit, filters }) {
@@ -29,6 +29,7 @@ async function getPosts({ offset, limit, filters }) {
     .populate(populateOpt)
     .skip(offset)
     .limit(limit)
+    .sort({published_at: -1})
     .lean()
 
   const meta = {
