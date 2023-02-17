@@ -2,9 +2,11 @@ import { CronJob } from 'cron'
 import Post from '../../models/posts.js'
 import axios from 'axios'
 import User from '../../models/users.js'
-import { Platforms } from '../../constants/index.js'
-
-const avatar_url_prefix = `https://images.viblo.asia/avatar`
+import {
+  Platforms,
+  avatarUrlPrefix,
+  vibloApiUrlPrefix
+} from '../../constants/index.js'
 
 export default async () => {
   const job = new CronJob(
@@ -24,9 +26,9 @@ const crawl = async () => {
   let limit = 30
   let page = 1
 
-  const viblo_url = `https://viblo.asia/api/posts/newest?page=${page}&limit=${limit}`
+  const viblo_url = `${vibloApiUrlPrefix}/posts/newest?page=${page}&limit=${limit}`
   console.log(viblo_url)
-  const { users, posts } = await fecthData(viblo_url)
+  const { users, posts } = await fecthData(viblo_url).catch(() => {})
 
   await Promise.allSettled(users.map(user => insertUser(user)))
   await Promise.allSettled(posts.map(post => insertPost(post)))
@@ -65,7 +67,7 @@ async function fecthData(url) {
           _id: post.user.data.username,
           name: post.user.data.name,
           username: post.user.data.username,
-          avatar: `${avatar_url_prefix}/${post.user.data.avatar}`,
+          avatar: `${avatarUrlPrefix}/${post.user.data.avatar}`,
           followers_count: post.user.data.followers_count,
           posts_count: post.user.data.posts_count,
           reputation: post.user.data.reputation

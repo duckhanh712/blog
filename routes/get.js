@@ -1,4 +1,4 @@
 export default async (_req, res) => {
 
-  return res.send('Crawling...')
+  return res.send('Welcome...')
 }
