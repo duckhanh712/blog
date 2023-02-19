@@ -11,7 +11,9 @@ export default async (req, res) => {
 }
 
 async function getPost(alias) {
-  return PostModel.findOne({ alias }, '-__v')
+  const selectOpt = '-__v -created_at -updated_at -platform -category -url'
+
+  return PostModel.findOne({ alias }, selectOpt)
     .populate({
       path: 'user',
       select: '-_id -__v'

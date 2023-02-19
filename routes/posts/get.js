@@ -24,8 +24,9 @@ async function getPosts({ offset, limit, filters }) {
     path: 'user',
     select: '-_id name username avatar reputation posts_count followers_count'
   }
+  const selectOpt = '-__v -created_at -updated_at -platform -category -url'
   const total = await PostModel.count(filters)
-  const posts = await PostModel.find(filters, '-__v -created_at -updated_at')
+  const posts = await PostModel.find(filters, selectOpt)
     .populate(populateOpt)
     .skip(offset)
     .limit(limit)

@@ -35,7 +35,6 @@
     "fs": "^0.0.1-security",
     "module-alias": "^2.2.2",
     "mongoose": "^6.9.0",
-    "mongoose-paginate-v2": "^1.7.1",
     "nnn-router": "^1.1.5",
     "snakecase-keys": "^5.4.5",
     "statuses": "^2.0.1"
