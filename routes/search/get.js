@@ -2,10 +2,11 @@ import camelcaseKeys from 'camelcase-keys'
 import PostModel from '../../models/posts.js'
 
 export default async (req, res) => {
+  const keyword = req.query.q
   const page = +req.query.page || 1
   const limit = +req.query.limit || 20
 
-  let filters = {}
+  let filters = { $text: { $search: keyword } }
 
   if (page <= 0 || limit < 1) return res.sendStatus(400)
   const offset = page > 1 ? (page - 1) * limit : 0
@@ -30,7 +31,6 @@ async function getPosts({ offset, limit, filters }) {
     .populate(populateOpt)
     .skip(offset)
     .limit(limit)
-    .sort({ published_at: -1 })
     .lean()
 
   const meta = {

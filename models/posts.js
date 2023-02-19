@@ -66,4 +66,6 @@ const PostSchema = new Schema(
   }
 )
 
+PostSchema.index({title: 'text', 'content': 'text'});
+
 export default mongoose.model('posts', PostSchema)

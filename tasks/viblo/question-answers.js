@@ -14,7 +14,7 @@ const commentTypes = {
   answer: 1
 }
 const devblogTeam = 'devblogTeam'
-const vibloTeam = 'VibloTeam'
+const vibloTeam = 'VibloTeam' 
 
 export default async () => {
   let limit = 50
